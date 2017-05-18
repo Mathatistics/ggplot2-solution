@@ -1,5 +1,5 @@
 Package: placeholder
-Title: Does not matter.
+Title: ggplot2-solution
 Version: 0.0.1
 Imports: bookdown
-Remotes: rstudio/bookdown
+Remotes: mathatistics/ggplot2-solution
