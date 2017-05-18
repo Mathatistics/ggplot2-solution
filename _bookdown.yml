@@ -1,4 +1,5 @@
 book_filename: "ggplot2-solution"
+clean: ggplot2-solution.Rmd
 output_dir: docs
 language:
   ui:

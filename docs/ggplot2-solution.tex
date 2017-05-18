@@ -13,6 +13,7 @@
     \usepackage{fontspec}
   \fi
   \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+    \setmonofont[Mapping=tex-ansi,Scale=0.7]{Source Code Pro}
 \fi
 % use upquote if available, for straight quotes in verbatim environments
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
@@ -23,10 +24,14 @@
 }{}
 \usepackage[margin=1in]{geometry}
 \usepackage{hyperref}
+\PassOptionsToPackage{usenames,dvipsnames}{color} % color is loaded by hyperref
 \hypersetup{unicode=true,
             pdftitle={A solution to ggplot2-book},
             pdfauthor={Raju Rimal},
-            pdfborder={0 0 0},
+            colorlinks=true,
+            linkcolor=Maroon,
+            citecolor=Blue,
+            urlcolor=Blue,
             breaklinks=true}
 \urlstyle{same}  % don't use monospace font for urls
 \usepackage{natbib}
@@ -124,7 +129,7 @@
   \postauthor{\par}
   \predate{\centering\large\emph}
   \postdate{\par}
-  \date{2017-05-18}
+  \date{2017-05-19}
 
 \usepackage{booktabs}
 \usepackage{amsthm}
@@ -135,142 +140,365 @@
 }
 \makeatother
 
-\usepackage{amsthm}
-\newtheorem{theorem}{Theorem}[chapter]
-\newtheorem{lemma}{Lemma}[chapter]
-\theoremstyle{definition}
-\newtheorem{definition}{Definition}[chapter]
-\newtheorem{corollary}{Corollary}[chapter]
-\newtheorem{proposition}{Proposition}[chapter]
-\theoremstyle{definition}
-\newtheorem{example}{Example}[chapter]
-\theoremstyle{remark}
-\newtheorem*{remark}{Remark}
 \begin{document}
 \maketitle
 
 {
+\hypersetup{linkcolor=black}
 \setcounter{tocdepth}{1}
 \tableofcontents
 }
-\chapter{Prerequisites}\label{prerequisites}
+\chapter*{Prerequisites}\label{prerequisites}
+\addcontentsline{toc}{chapter}{Prerequisites}
 
-This is a \emph{sample} book written in \textbf{Markdown}. You can use
-anything that Pandoc's Markdown supports, e.g., a math equation
-\(a^2 + b^2 = c^2\).
-
-For now, you have to install the development versions of
-\textbf{bookdown} from Github:
+This is a solution to the problems in ggplot2-book. In order to run all
+the solution, following packages need to be installed and loaded.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{devtools}\OperatorTok{::}\KeywordTok{install_github}\NormalTok{(}\StringTok{"rstudio/bookdown"}\NormalTok{)}
+\CommentTok{# devtools::install_github("hadley/tidyverse")}
+\NormalTok{pkgs <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"ggplot2"}\NormalTok{, }\StringTok{"dplyr"}\NormalTok{, }\StringTok{"pander"}\NormalTok{)}
+\ControlFlowTok{for}\NormalTok{ (pkg }\ControlFlowTok{in}\NormalTok{ pkgs) }\KeywordTok{require}\NormalTok{(pkg, }\DataTypeTok{character.only =} \OtherTok{TRUE}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
-Remember each Rmd file contains one and only one chapter, and a chapter
-is defined by the first-level heading \texttt{\#}.
+\chapter{Getting Started}\label{getting-started}
 
-To compile this example to PDF, you need to install XeLaTeX.
+\section{Fuel economy data}\label{fuel-economy-data}
 
-\chapter{Introduction}\label{intro}
+\subsection{Exercise 2.2.1}\label{exercise-2.2.1}
 
-You can label chapter and section titles using \texttt{\{\#label\}}
-after them, e.g., we can reference Chapter \ref{intro}. If you do not
-manually label them, there will be automatic labels anyway, e.g.,
-Chapter \ref{methods}.
-
-Figures and tables with captions will be placed in \texttt{figure} and
-\texttt{table} environments, respectively.
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  List five functions that you could use to get more information about
+  the \texttt{mpg} dataset. \texttt{str}, \texttt{summary}
+\item
+  How can you find out what other datasets are included with ggplot2?
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\KeywordTok{par}\NormalTok{(}\DataTypeTok{mar =} \KeywordTok{c}\NormalTok{(}\DecValTok{4}\NormalTok{, }\DecValTok{4}\NormalTok{, .}\DecValTok{1}\NormalTok{, .}\DecValTok{1}\NormalTok{))}
-\KeywordTok{plot}\NormalTok{(pressure, }\DataTypeTok{type =} \StringTok{'b'}\NormalTok{, }\DataTypeTok{pch =} \DecValTok{19}\NormalTok{)}
+\NormalTok{data_ggplot <-}\StringTok{ }\KeywordTok{data}\NormalTok{(}\DataTypeTok{package =} \StringTok{"ggplot2"}\NormalTok{)}
+\KeywordTok{pander}\NormalTok{(data_ggplot}\OperatorTok{$}\NormalTok{result[, }\OperatorTok{-}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\DecValTok{2}\NormalTok{)], }\DataTypeTok{justify =} \StringTok{"rl"}\NormalTok{, }
+       \DataTypeTok{split.cells =} \DecValTok{50}\NormalTok{, }\DataTypeTok{emphasize.verbatim.cols =} \DecValTok{1}\NormalTok{,}
+       \DataTypeTok{caption =} \StringTok{"(}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{#tab:ggplot2-data) Datasets in ggplot2 package"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
-\begin{figure}
-
-{\centering \includegraphics[width=0.8\linewidth]{ggplot2-solution_files/figure-latex/nice-fig-1} 
-
-}
-
-\caption{Here is a nice figure!}\label{fig:nice-fig}
-\end{figure}
-
-Reference a figure by its code chunk label with the \texttt{fig:}
-prefix, e.g., see Figure \ref{fig:nice-fig}. Similarly, you can
-reference tables generated from \texttt{knitr::kable()}, e.g., see Table
-\ref{tab:nice-tab}.
+  \begin{longtable}[]{@{}rl@{}}
+  \caption{\label{tab:ggplot2-data} Datasets in ggplot2
+  package}\tabularnewline
+  \toprule
+  \begin{minipage}[b]{0.22\columnwidth}\raggedleft\strut
+  Item\strut
+  \end{minipage} &
+  \begin{minipage}[b]{0.61\columnwidth}\raggedright\strut
+  Title\strut
+  \end{minipage}\tabularnewline
+  \midrule
+  \endfirsthead
+  \toprule
+  \begin{minipage}[b]{0.22\columnwidth}\raggedleft\strut
+  Item\strut
+  \end{minipage} &
+  \begin{minipage}[b]{0.61\columnwidth}\raggedright\strut
+  Title\strut
+  \end{minipage}\tabularnewline
+  \midrule
+  \endhead
+  \begin{minipage}[t]{0.22\columnwidth}\raggedleft\strut
+  \texttt{diamonds}\strut
+  \end{minipage} &
+  \begin{minipage}[t]{0.61\columnwidth}\raggedright\strut
+  Prices of 50,000 round cut diamonds\strut
+  \end{minipage}\tabularnewline
+  \begin{minipage}[t]{0.22\columnwidth}\raggedleft\strut
+  \texttt{economics}\strut
+  \end{minipage} &
+  \begin{minipage}[t]{0.61\columnwidth}\raggedright\strut
+  US economic time series\strut
+  \end{minipage}\tabularnewline
+  \begin{minipage}[t]{0.22\columnwidth}\raggedleft\strut
+  \texttt{economics\_long}\strut
+  \end{minipage} &
+  \begin{minipage}[t]{0.61\columnwidth}\raggedright\strut
+  US economic time series\strut
+  \end{minipage}\tabularnewline
+  \begin{minipage}[t]{0.22\columnwidth}\raggedleft\strut
+  \texttt{faithfuld}\strut
+  \end{minipage} &
+  \begin{minipage}[t]{0.61\columnwidth}\raggedright\strut
+  2d density estimate of Old Faithful data\strut
+  \end{minipage}\tabularnewline
+  \begin{minipage}[t]{0.22\columnwidth}\raggedleft\strut
+  \texttt{luv\_colours}\strut
+  \end{minipage} &
+  \begin{minipage}[t]{0.61\columnwidth}\raggedright\strut
+  `colors()' in Luv space\strut
+  \end{minipage}\tabularnewline
+  \begin{minipage}[t]{0.22\columnwidth}\raggedleft\strut
+  \texttt{midwest}\strut
+  \end{minipage} &
+  \begin{minipage}[t]{0.61\columnwidth}\raggedright\strut
+  Midwest demographics\strut
+  \end{minipage}\tabularnewline
+  \begin{minipage}[t]{0.22\columnwidth}\raggedleft\strut
+  \texttt{mpg}\strut
+  \end{minipage} &
+  \begin{minipage}[t]{0.61\columnwidth}\raggedright\strut
+  Fuel economy data from 1999 and 2008 for 38 popular models of
+  car\strut
+  \end{minipage}\tabularnewline
+  \begin{minipage}[t]{0.22\columnwidth}\raggedleft\strut
+  \texttt{msleep}\strut
+  \end{minipage} &
+  \begin{minipage}[t]{0.61\columnwidth}\raggedright\strut
+  An updated and expanded version of the mammals sleep dataset\strut
+  \end{minipage}\tabularnewline
+  \begin{minipage}[t]{0.22\columnwidth}\raggedleft\strut
+  \texttt{presidential}\strut
+  \end{minipage} &
+  \begin{minipage}[t]{0.61\columnwidth}\raggedright\strut
+  Terms of 11 presidents from Eisenhower to Obama\strut
+  \end{minipage}\tabularnewline
+  \begin{minipage}[t]{0.22\columnwidth}\raggedleft\strut
+  \texttt{seals}\strut
+  \end{minipage} &
+  \begin{minipage}[t]{0.61\columnwidth}\raggedright\strut
+  Vector field of seal movements\strut
+  \end{minipage}\tabularnewline
+  \begin{minipage}[t]{0.22\columnwidth}\raggedleft\strut
+  \texttt{txhousing}\strut
+  \end{minipage} &
+  \begin{minipage}[t]{0.61\columnwidth}\raggedright\strut
+  Housing sales in TX\strut
+  \end{minipage}\tabularnewline
+  \bottomrule
+  \end{longtable}
+\item
+  Apart from the US, most countries use fuel consumption (fuel consumed
+  over fixed distance) rather than fuel economy (distance travelled with
+  fixed amount of fuel). How could you convert \texttt{cty} and
+  \texttt{hwy} into the European standard of l/100km?
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{knitr}\OperatorTok{::}\KeywordTok{kable}\NormalTok{(}
-  \KeywordTok{head}\NormalTok{(iris, }\DecValTok{20}\NormalTok{), }\DataTypeTok{caption =} \StringTok{'Here is a nice table!'}\NormalTok{,}
-  \DataTypeTok{booktabs =} \OtherTok{TRUE}
-\NormalTok{)}
+\NormalTok{litre_per_km <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(mile_per_gallon) \{}
+  \KeywordTok{return}\NormalTok{(}\FloatTok{3.78541} \OperatorTok{/}\StringTok{ }\NormalTok{(}\FloatTok{1.60934} \OperatorTok{*}\StringTok{ }\NormalTok{mile_per_gallon))}
+\NormalTok{\}}
+
+\NormalTok{mpg_eu <-}\StringTok{ }\NormalTok{mpg }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{cty =} \KeywordTok{litre_per_km}\NormalTok{(cty) }\OperatorTok{*}\StringTok{ }\DecValTok{100}\NormalTok{,}
+         \DataTypeTok{hwy =} \KeywordTok{litre_per_km}\NormalTok{(hwy) }\OperatorTok{*}\StringTok{ }\DecValTok{100}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+\item
+  Which manufacturer has the most the models in this dataset? Which
+  model has the most variations? Does your answer change if you remove
+  the redundant specification of drive train (e.g. ``pathfinder 4wd'',
+  ``a4 quattro'') from the model name?
+
+  \textbf{Manufacturer with Most models:}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{mpg }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{group_by}\NormalTok{(manufacturer) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{summarize}\NormalTok{(}\DataTypeTok{model_count =} \KeywordTok{length}\NormalTok{(}\KeywordTok{unique}\NormalTok{(model))) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{arrange}\NormalTok{(}\OperatorTok{-}\NormalTok{model_count) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{ggplot}\NormalTok{(}\KeywordTok{aes}\NormalTok{(model_count, }\KeywordTok{reorder}\NormalTok{(manufacturer, model_count))) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{() }\OperatorTok{+}
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{x =} \StringTok{"Total Number of unique Models"}\NormalTok{, }\DataTypeTok{y =} \OtherTok{NULL}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
-\begin{table}
+  \includegraphics{ggplot2-solution_files/figure-latex/unnamed-chunk-5-1.pdf}
 
-\caption{\label{tab:nice-tab}Here is a nice table!}
-\centering
-\begin{tabular}[t]{rrrrl}
-\toprule
-Sepal.Length & Sepal.Width & Petal.Length & Petal.Width & Species\\
-\midrule
-5.1 & 3.5 & 1.4 & 0.2 & setosa\\
-4.9 & 3.0 & 1.4 & 0.2 & setosa\\
-4.7 & 3.2 & 1.3 & 0.2 & setosa\\
-4.6 & 3.1 & 1.5 & 0.2 & setosa\\
-5.0 & 3.6 & 1.4 & 0.2 & setosa\\
-\addlinespace
-5.4 & 3.9 & 1.7 & 0.4 & setosa\\
-4.6 & 3.4 & 1.4 & 0.3 & setosa\\
-5.0 & 3.4 & 1.5 & 0.2 & setosa\\
-4.4 & 2.9 & 1.4 & 0.2 & setosa\\
-4.9 & 3.1 & 1.5 & 0.1 & setosa\\
-\addlinespace
-5.4 & 3.7 & 1.5 & 0.2 & setosa\\
-4.8 & 3.4 & 1.6 & 0.2 & setosa\\
-4.8 & 3.0 & 1.4 & 0.1 & setosa\\
-4.3 & 3.0 & 1.1 & 0.1 & setosa\\
-5.8 & 4.0 & 1.2 & 0.2 & setosa\\
-\addlinespace
-5.7 & 4.4 & 1.5 & 0.4 & setosa\\
-5.4 & 3.9 & 1.3 & 0.4 & setosa\\
-5.1 & 3.5 & 1.4 & 0.3 & setosa\\
-5.7 & 3.8 & 1.7 & 0.3 & setosa\\
-5.1 & 3.8 & 1.5 & 0.3 & setosa\\
-\bottomrule
-\end{tabular}
-\end{table}
+  \textbf{Model with most variations:}
 
-You can write citations, too. For example, we are using the
-\textbf{bookdown} package \citep{R-bookdown} in this sample book, which
-was built on top of R Markdown and \textbf{knitr} \citep{xie2015}.
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{mpg }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{model_trim =} \KeywordTok{gsub}\NormalTok{(}\StringTok{"([a-zA-Z0-9]+).*"}\NormalTok{, }\StringTok{"}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{1"}\NormalTok{, model)) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{group_by}\NormalTok{(model) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{summarize}\NormalTok{(}\DataTypeTok{variation =} \KeywordTok{length}\NormalTok{(model)) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{arrange}\NormalTok{(}\OperatorTok{-}\NormalTok{variation) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{ggplot}\NormalTok{(}\KeywordTok{aes}\NormalTok{(variation, }\KeywordTok{reorder}\NormalTok{(model, variation))) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{() }\OperatorTok{+}
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{x =} \StringTok{"Total number of cars in each model"}\NormalTok{, }\DataTypeTok{y =} \OtherTok{NULL}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
 
-\chapter{Literature}\label{literature}
+  \includegraphics{ggplot2-solution_files/figure-latex/unnamed-chunk-6-1.pdf}
 
-Here is a review of existing methods.
+  \textbf{Variation after removing redundant specification:}
 
-\chapter{Methods}\label{methods}
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{mpg }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{model_trim =} \KeywordTok{gsub}\NormalTok{(}\StringTok{"([a-zA-Z0-9]+).*"}\NormalTok{, }\StringTok{"}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{1"}\NormalTok{, model)) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{group_by}\NormalTok{(model_trim) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{summarize}\NormalTok{(}\DataTypeTok{variation =} \KeywordTok{length}\NormalTok{(model)) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{arrange}\NormalTok{(}\OperatorTok{-}\NormalTok{variation) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{ggplot}\NormalTok{(}\KeywordTok{aes}\NormalTok{(variation, }\KeywordTok{reorder}\NormalTok{(model_trim, variation))) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{() }\OperatorTok{+}
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{x =} \StringTok{"Total number of cars in each model"}\NormalTok{, }\DataTypeTok{y =} \OtherTok{NULL}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
 
-We describe our methods in this chapter.
+  \includegraphics{ggplot2-solution_files/figure-latex/unnamed-chunk-7-1.pdf}
+\end{enumerate}
 
-\chapter{Applications}\label{applications}
+\section{Key components}\label{key-components}
 
-Some \emph{significant} applications are demonstrated in this chapter.
+\subsection{Exercises 2.3.1}\label{exercises-2.3.1}
 
-\section{Example one}\label{example-one}
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  How would you describe the relationship between \texttt{cty} and
+  \texttt{hwy} ? Do you have any concerns about drawing conclusions from
+  that plot?
 
-\section{Example two}\label{example-two}
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggplot}\NormalTok{(mpg, }\KeywordTok{aes}\NormalTok{(cty, hwy)) }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{position =} \StringTok{"jitter"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
 
-\chapter{Final Words}\label{final-words}
+  \includegraphics{ggplot2-solution_files/figure-latex/unnamed-chunk-8-1.pdf}
+  Its a linear relationship.
+\item
+  What does
+  \texttt{ggplot(mpg,\ aes(model,\ manufacturer))\ +\ geom\ point()}
+  show? Is it useful? How could you modify the data to make it more
+  informative?
 
-We have finished a nice book.
+  Not very informative but shows how may models a manufacture have. It
+  is more visible if we use \texttt{geom\_count} which uses the
+  \texttt{count} summary statistics for each combination of
+  \texttt{model} and \texttt{manufacturer}.
+\item
+  Describe the data, aesthetic mappings and layers used for each of the
+  following plots. You'll need to guess a little because you haven't
+  seen all the datasets and functions yet, but use your common sense!
+  See if you can predict what the plot will look like before running the
+  code.
+
+  \begin{enumerate}
+  \def\labelenumii{\alph{enumii}.}
+  \item
+    \texttt{ggplot(mpg,\ aes(cty,\ hwy))\ +\ geom\ point()}
+
+    Data is \texttt{mpg}, \texttt{x} and \texttt{y} axis are mapped to
+    \texttt{cty} and \texttt{hwy} variables and a layer of
+    \texttt{point} is added.
+  \item
+    \texttt{ggplot(diamonds,\ aes(carat,\ price))\ +\ geom\ point()}
+
+    Data is \texttt{diamonds}, \texttt{x} and \texttt{y} axis are mapped
+    to \texttt{carat} and \texttt{price} variables and a layer of
+    \texttt{point} is added.
+  \item
+    \texttt{ggplot(economics,\ aes(date,\ unemploy))\ +\ geom\ line()}
+
+    Data is \texttt{economics}, \texttt{x} and \texttt{y} axis are
+    mapped to \texttt{date} and \texttt{unemploy} variables and a layer
+    of \texttt{line} is added.
+  \item
+    \texttt{ggplot(mpg,\ aes(cty))\ +\ geom\ histogram()}
+
+    Data is \texttt{mpg}, \texttt{x} axis are mapped to \texttt{cty} and
+    a layer of \texttt{histogram} is added which uses the default bins
+    of \texttt{30}.
+  \end{enumerate}
+\end{enumerate}
+
+\section{Colour, size, shape and other aesthetic
+attributes}\label{colour-size-shape-and-other-aesthetic-attributes}
+
+\subsection{Exercises 2.4.1}\label{exercises-2.4.1}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  Experiment with the colour, shape and size aesthetics. What happens
+  when you map them to continuous values? What about categorical values?
+  What happens when you use more than one aesthetic in a plot?
+\item
+  What happens if you map a continuous variable to shape? Why? What
+  happens if you map trans to shape? Why?
+\item
+  How is drive train related to fuel economy? How is drive train related
+  to engine size and class?
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{mpg }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{group_by}\NormalTok{(model, class, drv) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{summarize}\NormalTok{(}\DataTypeTok{count =} \KeywordTok{n}\NormalTok{()) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{ggplot}\NormalTok{(}\KeywordTok{aes}\NormalTok{(class, model, }\DataTypeTok{color =}\NormalTok{ drv, }\DataTypeTok{size =}\NormalTok{ count)) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+  \includegraphics{ggplot2-solution_files/figure-latex/unnamed-chunk-9-1.pdf}
+
+  Here, we see that \texttt{suv} and \texttt{pickup} has mostly 4 whell
+  drive while rest are front-wheeled drive.
+\end{enumerate}
+
+\section{Facetting}\label{facetting}
+
+\subsection{Exercises 2.5.1}\label{exercises-2.5.1}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  What happens if you try to facet by a continuous variable like
+  \texttt{hwy} ? What about \texttt{cyl} ? What's the key difference?
+
+  When a continuous variables, like \texttt{hwy}, is used for facet,
+  ggplot converts it into factor and creates facet from all unique value
+  of that continuous variable. Here \texttt{hwy} has many unique values
+  so we will get many facets for each of them while \texttt{cyl} has few
+  discrete values and is useful to use for faceting.
+\item
+  Use facetting to explore the 3-way relationship between fuel economy,
+  engine size, and number of cylinders. How does facetting by number of
+  cylinders change your assessement of the relationship between engine
+  size and fuel economy?
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggplot}\NormalTok{(mpg, }\KeywordTok{aes}\NormalTok{(cty, hwy, }\DataTypeTok{color =}\NormalTok{ displ)) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{alpha =} \FloatTok{0.5}\NormalTok{, }\DataTypeTok{position =} \StringTok{"jitter"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{facet_grid}\NormalTok{(.}\OperatorTok{~}\NormalTok{cyl, }\DataTypeTok{labeller =}\NormalTok{ label_both)}
+\end{Highlighting}
+\end{Shaded}
+
+  \includegraphics{ggplot2-solution_files/figure-latex/unnamed-chunk-10-1.pdf}
+
+  Here we can see that larger engine size has lower milage in both city
+  and highway. In addition, vechile with large number of cylender has
+  larger engine size. Further there are very few vechile having 5
+  cylinder.
+\item
+  Read the documentation for \texttt{facet\ wrap()}. What arguments can
+  you use to control how many rows and columns appear in the output?
+
+  The \texttt{nrow} and \texttt{ncol} arguments in
+  \texttt{facet\_wrap()} controls the number of rows and columns.
+\item
+  What does the scales argument to facet wrap() do? When might you use
+  it?
+
+  Here \texttt{scales} can take three values -- \texttt{free},
+  \texttt{free\_x} and \texttt{free\_y}. \texttt{free\_x} gives separate
+  x-axis for each facet, \texttt{free\_y} gives separate y-axis for each
+  facet and similarly, \texttt{free} gives separate x and y axis for
+  each facet.
+\end{enumerate}
 
 \bibliography{packages.bib,book.bib}
 

@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>A solution to ggplot2-book</title>
+  <meta name="description" content="This is a solution to the problems in ggplot2-book by Hadley Wickham">
+  <meta name="generator" content="bookdown 0.3.21 and GitBook 2.6.7">
+
+  <meta property="og:title" content="A solution to ggplot2-book" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="This is a solution to the problems in ggplot2-book by Hadley Wickham" />
+  <meta name="github-repo" content="mathatistics/ggplot2-book" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="A solution to ggplot2-book" />
+  
+  <meta name="twitter:description" content="This is a solution to the problems in ggplot2-book by Hadley Wickham" />
+  
+
+<meta name="author" content="Raju Rimal">
+
+
+<meta name="date" content="2017-05-19">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="index.html">
+
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">A solution to ggplot2 book</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Prerequisites</a></li>
+<li class="chapter" data-level="" data-path="getting-started.html"><a href="getting-started.html"><i class="fa fa-check"></i>Getting Started</a><ul>
+<li class="chapter" data-level="" data-path="getting-started.html"><a href="getting-started.html#fuel-economy-data"><i class="fa fa-check"></i>Fuel economy data</a><ul>
+<li class="chapter" data-level="" data-path="getting-started.html"><a href="getting-started.html#exercise-2.2.1"><i class="fa fa-check"></i>Exercise 2.2.1</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="getting-started.html"><a href="getting-started.html#key-components"><i class="fa fa-check"></i>Key components</a><ul>
+<li class="chapter" data-level="" data-path="getting-started.html"><a href="getting-started.html#exercises-2.3.1"><i class="fa fa-check"></i>Exercises 2.3.1</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="getting-started.html"><a href="getting-started.html#colour-size-shape-and-other-aesthetic-attributes"><i class="fa fa-check"></i>Colour, size, shape and other aesthetic attributes</a><ul>
+<li class="chapter" data-level="" data-path="getting-started.html"><a href="getting-started.html#exercises-2.4.1"><i class="fa fa-check"></i>Exercises 2.4.1</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="getting-started.html"><a href="getting-started.html#facetting"><i class="fa fa-check"></i>Facetting</a><ul>
+<li class="chapter" data-level="" data-path="getting-started.html"><a href="getting-started.html#exercises-2.5.1"><i class="fa fa-check"></i>Exercises 2.5.1</a></li>
+</ul></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">A solution to ggplot2-book</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="getting-started" class="section level1">
+<h1>Getting Started</h1>
+<div id="fuel-economy-data" class="section level2">
+<h2>Fuel economy data</h2>
+<div id="exercise-2.2.1" class="section level3">
+<h3>Exercise 2.2.1</h3>
+<ol style="list-style-type: decimal">
+<li><p>List five functions that you could use to get more information about the <code>mpg</code> dataset. <code>str</code>, <code>summary</code></p></li>
+<li><p>How can you find out what other datasets are included with ggplot2?</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_ggplot &lt;-<span class="st"> </span><span class="kw">data</span>(<span class="dt">package =</span> <span class="st">&quot;ggplot2&quot;</span>)
+<span class="kw">pander</span>(data_ggplot<span class="op">$</span>result[, <span class="op">-</span><span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>)], <span class="dt">justify =</span> <span class="st">&quot;rl&quot;</span>, 
+       <span class="dt">split.cells =</span> <span class="dv">50</span>, <span class="dt">emphasize.verbatim.cols =</span> <span class="dv">1</span>,
+       <span class="dt">caption =</span> <span class="st">&quot;(</span><span class="ch">\\</span><span class="st">#tab:ggplot2-data) Datasets in ggplot2 package&quot;</span>)</code></pre></div>
+<table style="width:89%;">
+<caption><span id="tab:ggplot2-data">Table 1: </span> Datasets in ggplot2 package</caption>
+<colgroup>
+<col width="23%" />
+<col width="65%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="right">Item</th>
+<th align="left">Title</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right"><code>diamonds</code></td>
+<td align="left">Prices of 50,000 round cut diamonds</td>
+</tr>
+<tr class="even">
+<td align="right"><code>economics</code></td>
+<td align="left">US economic time series</td>
+</tr>
+<tr class="odd">
+<td align="right"><code>economics_long</code></td>
+<td align="left">US economic time series</td>
+</tr>
+<tr class="even">
+<td align="right"><code>faithfuld</code></td>
+<td align="left">2d density estimate of Old Faithful data</td>
+</tr>
+<tr class="odd">
+<td align="right"><code>luv_colours</code></td>
+<td align="left">‘colors()’ in Luv space</td>
+</tr>
+<tr class="even">
+<td align="right"><code>midwest</code></td>
+<td align="left">Midwest demographics</td>
+</tr>
+<tr class="odd">
+<td align="right"><code>mpg</code></td>
+<td align="left">Fuel economy data from 1999 and 2008 for 38 popular models of car</td>
+</tr>
+<tr class="even">
+<td align="right"><code>msleep</code></td>
+<td align="left">An updated and expanded version of the mammals sleep dataset</td>
+</tr>
+<tr class="odd">
+<td align="right"><code>presidential</code></td>
+<td align="left">Terms of 11 presidents from Eisenhower to Obama</td>
+</tr>
+<tr class="even">
+<td align="right"><code>seals</code></td>
+<td align="left">Vector field of seal movements</td>
+</tr>
+<tr class="odd">
+<td align="right"><code>txhousing</code></td>
+<td align="left">Housing sales in TX</td>
+</tr>
+</tbody>
+</table></li>
+<li><p>Apart from the US, most countries use fuel consumption (fuel consumed over fixed distance) rather than fuel economy (distance travelled with fixed amount of fuel). How could you convert <code>cty</code> and <code>hwy</code> into the European standard of l/100km?</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">litre_per_km &lt;-<span class="st"> </span><span class="cf">function</span>(mile_per_gallon) {
+  <span class="kw">return</span>(<span class="fl">3.78541</span> <span class="op">/</span><span class="st"> </span>(<span class="fl">1.60934</span> <span class="op">*</span><span class="st"> </span>mile_per_gallon))
+}
+
+mpg_eu &lt;-<span class="st"> </span>mpg <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">cty =</span> <span class="kw">litre_per_km</span>(cty) <span class="op">*</span><span class="st"> </span><span class="dv">100</span>,
+         <span class="dt">hwy =</span> <span class="kw">litre_per_km</span>(hwy) <span class="op">*</span><span class="st"> </span><span class="dv">100</span>)</code></pre></div></li>
+<li><p>Which manufacturer has the most the models in this dataset? Which model has the most variations? Does your answer change if you remove the redundant specification of drive train (e.g. “pathfinder 4wd”, “a4 quattro”) from the model name?</p>
+<p><strong>Manufacturer with Most models:</strong></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mpg <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">group_by</span>(manufacturer) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">summarize</span>(<span class="dt">model_count =</span> <span class="kw">length</span>(<span class="kw">unique</span>(model))) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">arrange</span>(<span class="op">-</span>model_count) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(model_count, <span class="kw">reorder</span>(manufacturer, model_count))) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Total Number of unique Models&quot;</span>, <span class="dt">y =</span> <span class="ot">NULL</span>)</code></pre></div>
+<p><img src="ggplot2-solution_files/figure-html/unnamed-chunk-5-1.svg" width="672" /></p>
+<p><strong>Model with most variations:</strong></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mpg <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">model_trim =</span> <span class="kw">gsub</span>(<span class="st">&quot;([a-zA-Z0-9]+).*&quot;</span>, <span class="st">&quot;</span><span class="ch">\\</span><span class="st">1&quot;</span>, model)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">group_by</span>(model) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">summarize</span>(<span class="dt">variation =</span> <span class="kw">length</span>(model)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">arrange</span>(<span class="op">-</span>variation) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(variation, <span class="kw">reorder</span>(model, variation))) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Total number of cars in each model&quot;</span>, <span class="dt">y =</span> <span class="ot">NULL</span>)</code></pre></div>
+<p><img src="ggplot2-solution_files/figure-html/unnamed-chunk-6-1.svg" width="672" /></p>
+<p><strong>Variation after removing redundant specification:</strong></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mpg <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">model_trim =</span> <span class="kw">gsub</span>(<span class="st">&quot;([a-zA-Z0-9]+).*&quot;</span>, <span class="st">&quot;</span><span class="ch">\\</span><span class="st">1&quot;</span>, model)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">group_by</span>(model_trim) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">summarize</span>(<span class="dt">variation =</span> <span class="kw">length</span>(model)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">arrange</span>(<span class="op">-</span>variation) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(variation, <span class="kw">reorder</span>(model_trim, variation))) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Total number of cars in each model&quot;</span>, <span class="dt">y =</span> <span class="ot">NULL</span>)</code></pre></div>
+<p><img src="ggplot2-solution_files/figure-html/unnamed-chunk-7-1.svg" width="672" /></p></li>
+</ol>
+</div>
+</div>
+<div id="key-components" class="section level2">
+<h2>Key components</h2>
+<div id="exercises-2.3.1" class="section level3">
+<h3>Exercises 2.3.1</h3>
+<ol style="list-style-type: decimal">
+<li><p>How would you describe the relationship between <code>cty</code> and <code>hwy</code> ? Do you have any concerns about drawing conclusions from that plot?</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(mpg, <span class="kw">aes</span>(cty, hwy)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>(<span class="dt">position =</span> <span class="st">&quot;jitter&quot;</span>)</code></pre></div>
+<p><img src="ggplot2-solution_files/figure-html/unnamed-chunk-8-1.svg" width="672" /> Its a linear relationship.</p></li>
+<li><p>What does <code>ggplot(mpg, aes(model, manufacturer)) + geom point()</code> show? Is it useful? How could you modify the data to make it more informative?</p>
+<p>Not very informative but shows how may models a manufacture have. It is more visible if we use <code>geom_count</code> which uses the <code>count</code> summary statistics for each combination of <code>model</code> and <code>manufacturer</code>.</p></li>
+<li>Describe the data, aesthetic mappings and layers used for each of the following plots. You’ll need to guess a little because you haven’t seen all the datasets and functions yet, but use your common sense! See if you can predict what the plot will look like before running the code.
+<ol style="list-style-type: lower-alpha">
+<li><p><code>ggplot(mpg, aes(cty, hwy)) + geom point()</code></p>
+<p>Data is <code>mpg</code>, <code>x</code> and <code>y</code> axis are mapped to <code>cty</code> and <code>hwy</code> variables and a layer of <code>point</code> is added.</p></li>
+<li><p><code>ggplot(diamonds, aes(carat, price)) + geom point()</code></p>
+<p>Data is <code>diamonds</code>, <code>x</code> and <code>y</code> axis are mapped to <code>carat</code> and <code>price</code> variables and a layer of <code>point</code> is added.</p></li>
+<li><p><code>ggplot(economics, aes(date, unemploy)) + geom line()</code></p>
+<p>Data is <code>economics</code>, <code>x</code> and <code>y</code> axis are mapped to <code>date</code> and <code>unemploy</code> variables and a layer of <code>line</code> is added.</p></li>
+<li><p><code>ggplot(mpg, aes(cty)) + geom histogram()</code></p>
+<p>Data is <code>mpg</code>, <code>x</code> axis are mapped to <code>cty</code> and a layer of <code>histogram</code> is added which uses the default bins of <code>30</code>.</p></li>
+</ol></li>
+</ol>
+</div>
+</div>
+<div id="colour-size-shape-and-other-aesthetic-attributes" class="section level2">
+<h2>Colour, size, shape and other aesthetic attributes</h2>
+<div id="exercises-2.4.1" class="section level3">
+<h3>Exercises 2.4.1</h3>
+<ol style="list-style-type: decimal">
+<li>Experiment with the colour, shape and size aesthetics. What happens when you map them to continuous values? What about categorical values? What happens when you use more than one aesthetic in a plot?</li>
+<li>What happens if you map a continuous variable to shape? Why? What happens if you map trans to shape? Why?</li>
+<li><p>How is drive train related to fuel economy? How is drive train related to engine size and class?</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mpg <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">group_by</span>(model, class, drv) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">summarize</span>(<span class="dt">count =</span> <span class="kw">n</span>()) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(class, model, <span class="dt">color =</span> drv, <span class="dt">size =</span> count)) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_point</span>()</code></pre></div>
+<p><img src="ggplot2-solution_files/figure-html/unnamed-chunk-9-1.svg" width="672" /></p>
+<p>Here, we see that <code>suv</code> and <code>pickup</code> has mostly 4 whell drive while rest are front-wheeled drive.</p></li>
+</ol>
+</div>
+</div>
+<div id="facetting" class="section level2">
+<h2>Facetting</h2>
+<div id="exercises-2.5.1" class="section level3">
+<h3>Exercises 2.5.1</h3>
+<ol style="list-style-type: decimal">
+<li><p>What happens if you try to facet by a continuous variable like <code>hwy</code> ? What about <code>cyl</code> ? What’s the key difference?</p>
+<p>When a continuous variables, like <code>hwy</code>, is used for facet, ggplot converts it into factor and creates facet from all unique value of that continuous variable. Here <code>hwy</code> has many unique values so we will get many facets for each of them while <code>cyl</code> has few discrete values and is useful to use for faceting.</p></li>
+<li><p>Use facetting to explore the 3-way relationship between fuel economy, engine size, and number of cylinders. How does facetting by number of cylinders change your assessement of the relationship between engine size and fuel economy?</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(mpg, <span class="kw">aes</span>(cty, hwy, <span class="dt">color =</span> displ)) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">alpha =</span> <span class="fl">0.5</span>, <span class="dt">position =</span> <span class="st">&quot;jitter&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">facet_grid</span>(.<span class="op">~</span>cyl, <span class="dt">labeller =</span> label_both)</code></pre></div>
+<p><img src="ggplot2-solution_files/figure-html/unnamed-chunk-10-1.svg" width="672" /></p>
+<p>Here we can see that larger engine size has lower milage in both city and highway. In addition, vechile with large number of cylender has larger engine size. Further there are very few vechile having 5 cylinder.</p></li>
+<li><p>Read the documentation for <code>facet wrap()</code>. What arguments can you use to control how many rows and columns appear in the output?</p>
+<p>The <code>nrow</code> and <code>ncol</code> arguments in <code>facet_wrap()</code> controls the number of rows and columns.</p></li>
+<li><p>What does the scales argument to facet wrap() do? When might you use it?</p>
+<p>Here <code>scales</code> can take three values – <code>free</code>, <code>free_x</code> and <code>free_y</code>. <code>free_x</code> gives separate x-axis for each facet, <code>free_y</code> gives separate y-axis for each facet and similarly, <code>free</code> gives separate x and y axis for each facet.</p></li>
+</ol>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="index.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/mathatistics/ggplot2-solution/edit/master/01-getting-started.Rmd",
+"text": "Edit"
+},
+"download": ["ggplot2-solution.pdf", "ggplot2-solution.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>
