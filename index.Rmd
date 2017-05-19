@@ -10,13 +10,14 @@ biblio-style: apalike
 link-citations: yes
 colorlinks: yes
 monofont: "Source Code Pro"
-monofontoptions: "Scale=0.7"
+monofontoptions: "Scale=0.6"
 github-repo: mathatistics/ggplot2-book
 description: "This is a solution to the problems in ggplot2-book by Hadley Wickham"
 ---
 
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(comment = NULL)
+source("common.R")
 ```
 
 
@@ -27,7 +28,7 @@ This is a solution to the problems in ggplot2-book. In order to run all the solu
 
 ```{r, warning=FALSE, message = FALSE}
 # devtools::install_github("hadley/tidyverse")
-pkgs <- c("ggplot2", "dplyr", "pander")
+pkgs <- c("ggplot2", "dplyr", "pander", "stringr")
 for (pkg in pkgs) require(pkg, character.only = TRUE)
 ```
 

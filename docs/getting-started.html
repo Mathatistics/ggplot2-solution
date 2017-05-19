@@ -117,6 +117,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="" data-path="getting-started.html"><a href="getting-started.html#facetting"><i class="fa fa-check"></i>Facetting</a><ul>
 <li class="chapter" data-level="" data-path="getting-started.html"><a href="getting-started.html#exercises-2.5.1"><i class="fa fa-check"></i>Exercises 2.5.1</a></li>
 </ul></li>
+<li class="chapter" data-level="" data-path="getting-started.html"><a href="getting-started.html#plot-geoms"><i class="fa fa-check"></i>Plot geoms</a><ul>
+<li class="chapter" data-level="" data-path="getting-started.html"><a href="getting-started.html#exercises-2.6.6"><i class="fa fa-check"></i>Exercises 2.6.6</a></li>
+</ul></li>
 </ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -149,10 +152,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li><p>How can you find out what other datasets are included with ggplot2?</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_ggplot &lt;-<span class="st"> </span><span class="kw">data</span>(<span class="dt">package =</span> <span class="st">&quot;ggplot2&quot;</span>)
 <span class="kw">pander</span>(data_ggplot<span class="op">$</span>result[, <span class="op">-</span><span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>)], <span class="dt">justify =</span> <span class="st">&quot;rl&quot;</span>, 
-       <span class="dt">split.cells =</span> <span class="dv">50</span>, <span class="dt">emphasize.verbatim.cols =</span> <span class="dv">1</span>,
-       <span class="dt">caption =</span> <span class="st">&quot;(</span><span class="ch">\\</span><span class="st">#tab:ggplot2-data) Datasets in ggplot2 package&quot;</span>)</code></pre></div>
+       <span class="dt">split.cells =</span> <span class="dv">50</span>, <span class="dt">emphasize.verbatim.cols =</span> <span class="dv">1</span>)</code></pre></div>
 <table style="width:89%;">
-<caption><span id="tab:ggplot2-data">Table 1: </span> Datasets in ggplot2 package</caption>
 <colgroup>
 <col width="23%" />
 <col width="65%" />
@@ -219,35 +220,30 @@ mpg_eu &lt;-<span class="st"> </span>mpg <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">cty =</span> <span class="kw">litre_per_km</span>(cty) <span class="op">*</span><span class="st"> </span><span class="dv">100</span>,
          <span class="dt">hwy =</span> <span class="kw">litre_per_km</span>(hwy) <span class="op">*</span><span class="st"> </span><span class="dv">100</span>)</code></pre></div></li>
 <li><p>Which manufacturer has the most the models in this dataset? Which model has the most variations? Does your answer change if you remove the redundant specification of drive train (e.g. “pathfinder 4wd”, “a4 quattro”) from the model name?</p>
-<p><strong>Manufacturer with Most models:</strong></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mpg <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">group_by</span>(manufacturer) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">summarize</span>(<span class="dt">model_count =</span> <span class="kw">length</span>(<span class="kw">unique</span>(model))) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">arrange</span>(<span class="op">-</span>model_count) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(model_count, <span class="kw">reorder</span>(manufacturer, model_count))) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Total Number of unique Models&quot;</span>, <span class="dt">y =</span> <span class="ot">NULL</span>)</code></pre></div>
-<p><img src="ggplot2-solution_files/figure-html/unnamed-chunk-5-1.svg" width="672" /></p>
-<p><strong>Model with most variations:</strong></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mpg <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">model_trim =</span> <span class="kw">gsub</span>(<span class="st">&quot;([a-zA-Z0-9]+).*&quot;</span>, <span class="st">&quot;</span><span class="ch">\\</span><span class="st">1&quot;</span>, model)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">group_by</span>(model) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">summarize</span>(<span class="dt">variation =</span> <span class="kw">length</span>(model)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">arrange</span>(<span class="op">-</span>variation) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(variation, <span class="kw">reorder</span>(model, variation))) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Total number of cars in each model&quot;</span>, <span class="dt">y =</span> <span class="ot">NULL</span>)</code></pre></div>
-<p><img src="ggplot2-solution_files/figure-html/unnamed-chunk-6-1.svg" width="672" /></p>
-<p><strong>Variation after removing redundant specification:</strong></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mpg <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">model_trim =</span> <span class="kw">gsub</span>(<span class="st">&quot;([a-zA-Z0-9]+).*&quot;</span>, <span class="st">&quot;</span><span class="ch">\\</span><span class="st">1&quot;</span>, model)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">group_by</span>(model_trim) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">summarize</span>(<span class="dt">variation =</span> <span class="kw">length</span>(model)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">arrange</span>(<span class="op">-</span>variation) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(variation, <span class="kw">reorder</span>(model_trim, variation))) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Total number of cars in each model&quot;</span>, <span class="dt">y =</span> <span class="ot">NULL</span>)</code></pre></div>
-<p><img src="ggplot2-solution_files/figure-html/unnamed-chunk-7-1.svg" width="672" /></p></li>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dta &lt;-<span class="st"> </span>mpg <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(
+    <span class="dt">model_clean =</span> <span class="kw">str_extract</span>(model, <span class="st">&quot;(^[a-zA-Z0-9]+)&quot;</span>)
+  ) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">group_by</span>(manufacturer, model_clean, model) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">summarize</span>(<span class="dt">count =</span> <span class="kw">n</span>())
+dta <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="kw">reorder</span>(manufacturer, count), 
+             <span class="kw">reorder</span>(model, count), 
+             <span class="dt">label =</span> count, <span class="dt">size =</span> count)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_text</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">angle =</span> <span class="dv">30</span>, <span class="dt">hjust =</span> <span class="dv">1</span>),
+        <span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Manufacturer&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Model&quot;</span>)</code></pre></div>
+<p><img src="ggplot2-solution_files/figure-html/unnamed-chunk-5-1.svg" width="100%" style='max-width: 6in' /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dta <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="kw">reorder</span>(manufacturer, count), 
+             <span class="kw">reorder</span>(model_clean, count), 
+             <span class="dt">label =</span> count, <span class="dt">size =</span> count)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_text</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">angle =</span> <span class="dv">30</span>, <span class="dt">hjust =</span> <span class="dv">1</span>),
+        <span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Manufacturer&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Model&quot;</span>)</code></pre></div>
+<p><img src="ggplot2-solution_files/figure-html/unnamed-chunk-6-1.svg" width="100%" style='max-width: 6in' /></p></li>
 </ol>
 </div>
 </div>
@@ -258,7 +254,7 @@ mpg_eu &lt;-<span class="st"> </span>mpg <span class="op">%&gt;%</span>
 <ol style="list-style-type: decimal">
 <li><p>How would you describe the relationship between <code>cty</code> and <code>hwy</code> ? Do you have any concerns about drawing conclusions from that plot?</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(mpg, <span class="kw">aes</span>(cty, hwy)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>(<span class="dt">position =</span> <span class="st">&quot;jitter&quot;</span>)</code></pre></div>
-<p><img src="ggplot2-solution_files/figure-html/unnamed-chunk-8-1.svg" width="672" /> Its a linear relationship.</p></li>
+<p><img src="ggplot2-solution_files/figure-html/unnamed-chunk-7-1.svg" width="100%" style='max-width: 6in' style="display: block; margin: auto;" /> Its a linear relationship.</p></li>
 <li><p>What does <code>ggplot(mpg, aes(model, manufacturer)) + geom point()</code> show? Is it useful? How could you modify the data to make it more informative?</p>
 <p>Not very informative but shows how may models a manufacture have. It is more visible if we use <code>geom_count</code> which uses the <code>count</code> summary statistics for each combination of <code>model</code> and <code>manufacturer</code>.</p></li>
 <li>Describe the data, aesthetic mappings and layers used for each of the following plots. You’ll need to guess a little because you haven’t seen all the datasets and functions yet, but use your common sense! See if you can predict what the plot will look like before running the code.
@@ -288,7 +284,7 @@ mpg_eu &lt;-<span class="st"> </span>mpg <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">summarize</span>(<span class="dt">count =</span> <span class="kw">n</span>()) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(class, model, <span class="dt">color =</span> drv, <span class="dt">size =</span> count)) <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">geom_point</span>()</code></pre></div>
-<p><img src="ggplot2-solution_files/figure-html/unnamed-chunk-9-1.svg" width="672" /></p>
+<p><img src="ggplot2-solution_files/figure-html/unnamed-chunk-8-1.svg" width="100%" style='max-width: 6in' /></p>
 <p>Here, we see that <code>suv</code> and <code>pickup</code> has mostly 4 whell drive while rest are front-wheeled drive.</p></li>
 </ol>
 </div>
@@ -303,13 +299,53 @@ mpg_eu &lt;-<span class="st"> </span>mpg <span class="op">%&gt;%</span>
 <li><p>Use facetting to explore the 3-way relationship between fuel economy, engine size, and number of cylinders. How does facetting by number of cylinders change your assessement of the relationship between engine size and fuel economy?</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(mpg, <span class="kw">aes</span>(cty, hwy, <span class="dt">color =</span> displ)) <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">alpha =</span> <span class="fl">0.5</span>, <span class="dt">position =</span> <span class="st">&quot;jitter&quot;</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">facet_grid</span>(.<span class="op">~</span>cyl, <span class="dt">labeller =</span> label_both)</code></pre></div>
-<p><img src="ggplot2-solution_files/figure-html/unnamed-chunk-10-1.svg" width="672" /></p>
+<span class="st">  </span><span class="kw">facet_grid</span>(.<span class="op">~</span>cyl, <span class="dt">labeller =</span> label_both) <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;top&quot;</span>)</code></pre></div>
+<p><img src="ggplot2-solution_files/figure-html/unnamed-chunk-9-1.svg" width="100%" style='max-width: 6in' /></p>
 <p>Here we can see that larger engine size has lower milage in both city and highway. In addition, vechile with large number of cylender has larger engine size. Further there are very few vechile having 5 cylinder.</p></li>
 <li><p>Read the documentation for <code>facet wrap()</code>. What arguments can you use to control how many rows and columns appear in the output?</p>
 <p>The <code>nrow</code> and <code>ncol</code> arguments in <code>facet_wrap()</code> controls the number of rows and columns.</p></li>
 <li><p>What does the scales argument to facet wrap() do? When might you use it?</p>
 <p>Here <code>scales</code> can take three values – <code>free</code>, <code>free_x</code> and <code>free_y</code>. <code>free_x</code> gives separate x-axis for each facet, <code>free_y</code> gives separate y-axis for each facet and similarly, <code>free</code> gives separate x and y axis for each facet.</p></li>
+</ol>
+</div>
+</div>
+<div id="plot-geoms" class="section level2">
+<h2>Plot geoms</h2>
+<div id="exercises-2.6.6" class="section level3">
+<h3>Exercises 2.6.6</h3>
+<ol style="list-style-type: decimal">
+<li><p>What’s the problem with the plot created by <code>ggplot(mpg, aes(cty, hwy)) + geom_point()</code>? Which of the geoms described above is most effective at remedying the problem?</p>
+<p>Many points in this plots are overlapped so we can see only few points. In these situation, we can either use <code>alpha</code> argument for making the points transparent so that we can see the points underneath or use <code>jitter</code> position to add some randomness on the points.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(mpg, <span class="kw">aes</span>(cty, hwy)) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">alpha =</span> <span class="fl">0.5</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;With 0.5 opacity&quot;</span>)
+
+<span class="kw">ggplot</span>(mpg, <span class="kw">aes</span>(cty, hwy)) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">position =</span> <span class="st">&quot;jitter&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;With jitter position&quot;</span>)</code></pre></div>
+<p><img src="ggplot2-solution_files/figure-html/unnamed-chunk-10-1.svg" width="50%" style='max-width: 3in' /><img src="ggplot2-solution_files/figure-html/unnamed-chunk-10-2.svg" width="50%" style='max-width: 3in' /></p></li>
+<li><p>One challenge with <code>ggplot(mpg, aes(class, hwy)) + geom_boxplot()</code> is that the ordering of <code>class</code> is alphabetical, which is not terribly useful. How could you change the factor levels to be more informative?</p>
+<p>Rather than reordering the factor by hand, you can do it automatically based on the data: <code>ggplot(mpg, aes(reorder(class, hwy), hwy)) + geom_boxplot()</code>. What does <code>reorder()</code> do? Read the documentation.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(mpg, <span class="kw">aes</span>(<span class="kw">reorder</span>(class, hwy), hwy)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</code></pre></div>
+<p><img src="ggplot2-solution_files/figure-html/unnamed-chunk-11-1.svg" width="100%" style='max-width: 6in' /> Here <code>reorder</code> arrange the factor <code>class</code> according to the magnitute of <code>hwy</code> in ascending order.</p></li>
+<li><p>Explore the distribution of the carat variable in the <code>diamonds</code> dataset. What binwidth reveals the most interesting patterns?</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(diamonds, <span class="kw">aes</span>(carat)) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">binwidth =</span> <span class="fl">0.01</span>) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;binwidth: 0.01&quot;</span>)
+
+<span class="kw">ggplot</span>(diamonds, <span class="kw">aes</span>(carat)) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">binwidth =</span> <span class="fl">0.03</span>) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;binwidth: 0.01&quot;</span>)</code></pre></div>
+<p><img src="ggplot2-solution_files/figure-html/unnamed-chunk-12-1.svg" width="50%" style='max-width: 3in' /><img src="ggplot2-solution_files/figure-html/unnamed-chunk-12-2.svg" width="50%" style='max-width: 3in' /></p></li>
+<li><p>Explore the distribution of the price variable in the <code>diamonds</code> data. How does the distribution vary by cut?</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(diamonds, <span class="kw">aes</span>(price)) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">30</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">facet_grid</span>(.<span class="op">~</span>cut)</code></pre></div>
+<p><img src="ggplot2-solution_files/figure-html/unnamed-chunk-13-1.svg" width="100%" style='max-width: 6in' /></p></li>
+<li><p>You now know (at least) three ways to compare the distributions of subgroups: <code>geom_violin()</code>, <code>geom_freqpoly()</code> and the colour aesthetic, or <code>geom_histogram()</code> and facetting. What are the strengths and weaknesses of each approach? What other approaches could you try?</p></li>
+<li><p>Read the documentation for <code>geom_bar()</code>. What does the <code>weight</code> aesthetic do?</p></li>
+<li><p>Using the techniques already discussed in this chapter, come up with three ways to visualise a 2d categorical distribution. Try them out by visualising the distribution of <code>model</code> and <code>manufacturer</code>, <code>trans</code> and <code>class</code>, and <code>cyl</code> and <code>trans</code>.</p></li>
 </ol>
 
 </div>

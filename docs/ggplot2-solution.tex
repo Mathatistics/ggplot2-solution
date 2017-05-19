@@ -13,7 +13,7 @@
     \usepackage{fontspec}
   \fi
   \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
-    \setmonofont[Mapping=tex-ansi,Scale=0.7]{Source Code Pro}
+    \setmonofont[Mapping=tex-ansi,Scale=0.6]{Source Code Pro}
 \fi
 % use upquote if available, for straight quotes in verbatim environments
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
@@ -157,7 +157,7 @@ the solution, following packages need to be installed and loaded.
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{# devtools::install_github("hadley/tidyverse")}
-\NormalTok{pkgs <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"ggplot2"}\NormalTok{, }\StringTok{"dplyr"}\NormalTok{, }\StringTok{"pander"}\NormalTok{)}
+\NormalTok{pkgs <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"ggplot2"}\NormalTok{, }\StringTok{"dplyr"}\NormalTok{, }\StringTok{"pander"}\NormalTok{, }\StringTok{"stringr"}\NormalTok{)}
 \ControlFlowTok{for}\NormalTok{ (pkg }\ControlFlowTok{in}\NormalTok{ pkgs) }\KeywordTok{require}\NormalTok{(pkg, }\DataTypeTok{character.only =} \OtherTok{TRUE}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
@@ -180,23 +180,11 @@ the solution, following packages need to be installed and loaded.
 \begin{Highlighting}[]
 \NormalTok{data_ggplot <-}\StringTok{ }\KeywordTok{data}\NormalTok{(}\DataTypeTok{package =} \StringTok{"ggplot2"}\NormalTok{)}
 \KeywordTok{pander}\NormalTok{(data_ggplot}\OperatorTok{$}\NormalTok{result[, }\OperatorTok{-}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\DecValTok{2}\NormalTok{)], }\DataTypeTok{justify =} \StringTok{"rl"}\NormalTok{, }
-       \DataTypeTok{split.cells =} \DecValTok{50}\NormalTok{, }\DataTypeTok{emphasize.verbatim.cols =} \DecValTok{1}\NormalTok{,}
-       \DataTypeTok{caption =} \StringTok{"(}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{#tab:ggplot2-data) Datasets in ggplot2 package"}\NormalTok{)}
+       \DataTypeTok{split.cells =} \DecValTok{50}\NormalTok{, }\DataTypeTok{emphasize.verbatim.cols =} \DecValTok{1}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
   \begin{longtable}[]{@{}rl@{}}
-  \caption{\label{tab:ggplot2-data} Datasets in ggplot2
-  package}\tabularnewline
-  \toprule
-  \begin{minipage}[b]{0.22\columnwidth}\raggedleft\strut
-  Item\strut
-  \end{minipage} &
-  \begin{minipage}[b]{0.61\columnwidth}\raggedright\strut
-  Title\strut
-  \end{minipage}\tabularnewline
-  \midrule
-  \endfirsthead
   \toprule
   \begin{minipage}[b]{0.22\columnwidth}\raggedleft\strut
   Item\strut
@@ -298,55 +286,41 @@ the solution, following packages need to be installed and loaded.
   the redundant specification of drive train (e.g. ``pathfinder 4wd'',
   ``a4 quattro'') from the model name?
 
-  \textbf{Manufacturer with Most models:}
-
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{mpg }\OperatorTok{%>%}\StringTok{ }
-\StringTok{  }\KeywordTok{group_by}\NormalTok{(manufacturer) }\OperatorTok{%>%}\StringTok{ }
-\StringTok{  }\KeywordTok{summarize}\NormalTok{(}\DataTypeTok{model_count =} \KeywordTok{length}\NormalTok{(}\KeywordTok{unique}\NormalTok{(model))) }\OperatorTok{%>%}\StringTok{ }
-\StringTok{  }\KeywordTok{arrange}\NormalTok{(}\OperatorTok{-}\NormalTok{model_count) }\OperatorTok{%>%}\StringTok{ }
-\StringTok{  }\KeywordTok{ggplot}\NormalTok{(}\KeywordTok{aes}\NormalTok{(model_count, }\KeywordTok{reorder}\NormalTok{(manufacturer, model_count))) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{geom_point}\NormalTok{() }\OperatorTok{+}
-\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{x =} \StringTok{"Total Number of unique Models"}\NormalTok{, }\DataTypeTok{y =} \OtherTok{NULL}\NormalTok{)}
+\NormalTok{dta <-}\StringTok{ }\NormalTok{mpg }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}
+    \DataTypeTok{model_clean =} \KeywordTok{str_extract}\NormalTok{(model, }\StringTok{"(^[a-zA-Z0-9]+)"}\NormalTok{)}
+\NormalTok{  ) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{group_by}\NormalTok{(manufacturer, model_clean, model) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{summarize}\NormalTok{(}\DataTypeTok{count =} \KeywordTok{n}\NormalTok{())}
+\NormalTok{dta }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{ggplot}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\KeywordTok{reorder}\NormalTok{(manufacturer, count), }
+             \KeywordTok{reorder}\NormalTok{(model, count), }
+             \DataTypeTok{label =}\NormalTok{ count, }\DataTypeTok{size =}\NormalTok{ count)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_text}\NormalTok{() }\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{axis.text.x =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{angle =} \DecValTok{30}\NormalTok{, }\DataTypeTok{hjust =} \DecValTok{1}\NormalTok{),}
+        \DataTypeTok{legend.position =} \StringTok{"none"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{x =} \StringTok{"Manufacturer"}\NormalTok{, }\DataTypeTok{y =} \StringTok{"Model"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
-  \includegraphics{ggplot2-solution_files/figure-latex/unnamed-chunk-5-1.pdf}
-
-  \textbf{Model with most variations:}
+  \includegraphics[width=1\linewidth]{ggplot2-solution_files/figure-latex/unnamed-chunk-5-1}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{mpg }\OperatorTok{%>%}\StringTok{ }
-\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{model_trim =} \KeywordTok{gsub}\NormalTok{(}\StringTok{"([a-zA-Z0-9]+).*"}\NormalTok{, }\StringTok{"}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{1"}\NormalTok{, model)) }\OperatorTok{%>%}\StringTok{ }
-\StringTok{  }\KeywordTok{group_by}\NormalTok{(model) }\OperatorTok{%>%}\StringTok{ }
-\StringTok{  }\KeywordTok{summarize}\NormalTok{(}\DataTypeTok{variation =} \KeywordTok{length}\NormalTok{(model)) }\OperatorTok{%>%}\StringTok{ }
-\StringTok{  }\KeywordTok{arrange}\NormalTok{(}\OperatorTok{-}\NormalTok{variation) }\OperatorTok{%>%}\StringTok{ }
-\StringTok{  }\KeywordTok{ggplot}\NormalTok{(}\KeywordTok{aes}\NormalTok{(variation, }\KeywordTok{reorder}\NormalTok{(model, variation))) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{geom_point}\NormalTok{() }\OperatorTok{+}
-\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{x =} \StringTok{"Total number of cars in each model"}\NormalTok{, }\DataTypeTok{y =} \OtherTok{NULL}\NormalTok{)}
+\NormalTok{dta }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{ggplot}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\KeywordTok{reorder}\NormalTok{(manufacturer, count), }
+             \KeywordTok{reorder}\NormalTok{(model_clean, count), }
+             \DataTypeTok{label =}\NormalTok{ count, }\DataTypeTok{size =}\NormalTok{ count)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_text}\NormalTok{() }\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{axis.text.x =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{angle =} \DecValTok{30}\NormalTok{, }\DataTypeTok{hjust =} \DecValTok{1}\NormalTok{),}
+        \DataTypeTok{legend.position =} \StringTok{"none"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{x =} \StringTok{"Manufacturer"}\NormalTok{, }\DataTypeTok{y =} \StringTok{"Model"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
-  \includegraphics{ggplot2-solution_files/figure-latex/unnamed-chunk-6-1.pdf}
-
-  \textbf{Variation after removing redundant specification:}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{mpg }\OperatorTok{%>%}\StringTok{ }
-\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{model_trim =} \KeywordTok{gsub}\NormalTok{(}\StringTok{"([a-zA-Z0-9]+).*"}\NormalTok{, }\StringTok{"}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{1"}\NormalTok{, model)) }\OperatorTok{%>%}\StringTok{ }
-\StringTok{  }\KeywordTok{group_by}\NormalTok{(model_trim) }\OperatorTok{%>%}\StringTok{ }
-\StringTok{  }\KeywordTok{summarize}\NormalTok{(}\DataTypeTok{variation =} \KeywordTok{length}\NormalTok{(model)) }\OperatorTok{%>%}\StringTok{ }
-\StringTok{  }\KeywordTok{arrange}\NormalTok{(}\OperatorTok{-}\NormalTok{variation) }\OperatorTok{%>%}\StringTok{ }
-\StringTok{  }\KeywordTok{ggplot}\NormalTok{(}\KeywordTok{aes}\NormalTok{(variation, }\KeywordTok{reorder}\NormalTok{(model_trim, variation))) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{geom_point}\NormalTok{() }\OperatorTok{+}
-\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{x =} \StringTok{"Total number of cars in each model"}\NormalTok{, }\DataTypeTok{y =} \OtherTok{NULL}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-  \includegraphics{ggplot2-solution_files/figure-latex/unnamed-chunk-7-1.pdf}
+  \includegraphics[width=1\linewidth]{ggplot2-solution_files/figure-latex/unnamed-chunk-6-1}
 \end{enumerate}
 
 \section{Key components}\label{key-components}
@@ -366,7 +340,8 @@ the solution, following packages need to be installed and loaded.
 \end{Highlighting}
 \end{Shaded}
 
-  \includegraphics{ggplot2-solution_files/figure-latex/unnamed-chunk-8-1.pdf}
+  \begin{center}\includegraphics[width=1\linewidth]{ggplot2-solution_files/figure-latex/unnamed-chunk-7-1} \end{center}
+
   Its a linear relationship.
 \item
   What does
@@ -442,7 +417,7 @@ attributes}\label{colour-size-shape-and-other-aesthetic-attributes}
 \end{Highlighting}
 \end{Shaded}
 
-  \includegraphics{ggplot2-solution_files/figure-latex/unnamed-chunk-9-1.pdf}
+  \includegraphics[width=1\linewidth]{ggplot2-solution_files/figure-latex/unnamed-chunk-8-1}
 
   Here, we see that \texttt{suv} and \texttt{pickup} has mostly 4 whell
   drive while rest are front-wheeled drive.
@@ -473,11 +448,12 @@ attributes}\label{colour-size-shape-and-other-aesthetic-attributes}
 \begin{Highlighting}[]
 \KeywordTok{ggplot}\NormalTok{(mpg, }\KeywordTok{aes}\NormalTok{(cty, hwy, }\DataTypeTok{color =}\NormalTok{ displ)) }\OperatorTok{+}\StringTok{ }
 \StringTok{  }\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{alpha =} \FloatTok{0.5}\NormalTok{, }\DataTypeTok{position =} \StringTok{"jitter"}\NormalTok{) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{facet_grid}\NormalTok{(.}\OperatorTok{~}\NormalTok{cyl, }\DataTypeTok{labeller =}\NormalTok{ label_both)}
+\StringTok{  }\KeywordTok{facet_grid}\NormalTok{(.}\OperatorTok{~}\NormalTok{cyl, }\DataTypeTok{labeller =}\NormalTok{ label_both) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{legend.position =} \StringTok{"top"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
-  \includegraphics{ggplot2-solution_files/figure-latex/unnamed-chunk-10-1.pdf}
+  \includegraphics[width=1\linewidth]{ggplot2-solution_files/figure-latex/unnamed-chunk-9-1}
 
   Here we can see that larger engine size has lower milage in both city
   and highway. In addition, vechile with large number of cylender has
@@ -498,6 +474,106 @@ attributes}\label{colour-size-shape-and-other-aesthetic-attributes}
   x-axis for each facet, \texttt{free\_y} gives separate y-axis for each
   facet and similarly, \texttt{free} gives separate x and y axis for
   each facet.
+\end{enumerate}
+
+\section{Plot geoms}\label{plot-geoms}
+
+\subsection{Exercises 2.6.6}\label{exercises-2.6.6}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  What's the problem with the plot created by
+  \texttt{ggplot(mpg,\ aes(cty,\ hwy))\ +\ geom\_point()}? Which of the
+  geoms described above is most effective at remedying the problem?
+
+  Many points in this plots are overlapped so we can see only few
+  points. In these situation, we can either use \texttt{alpha} argument
+  for making the points transparent so that we can see the points
+  underneath or use \texttt{jitter} position to add some randomness on
+  the points.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggplot}\NormalTok{(mpg, }\KeywordTok{aes}\NormalTok{(cty, hwy)) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{alpha =} \FloatTok{0.5}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{ggtitle}\NormalTok{(}\StringTok{"With 0.5 opacity"}\NormalTok{)}
+
+\KeywordTok{ggplot}\NormalTok{(mpg, }\KeywordTok{aes}\NormalTok{(cty, hwy)) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{position =} \StringTok{"jitter"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{ggtitle}\NormalTok{(}\StringTok{"With jitter position"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+  \includegraphics[width=0.5\linewidth]{ggplot2-solution_files/figure-latex/unnamed-chunk-10-1}
+  \includegraphics[width=0.5\linewidth]{ggplot2-solution_files/figure-latex/unnamed-chunk-10-2}
+\item
+  One challenge with
+  \texttt{ggplot(mpg,\ aes(class,\ hwy))\ +\ geom\_boxplot()} is that
+  the ordering of \texttt{class} is alphabetical, which is not terribly
+  useful. How could you change the factor levels to be more informative?
+
+  Rather than reordering the factor by hand, you can do it automatically
+  based on the data:
+  \texttt{ggplot(mpg,\ aes(reorder(class,\ hwy),\ hwy))\ +\ geom\_boxplot()}.
+  What does \texttt{reorder()} do? Read the documentation.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggplot}\NormalTok{(mpg, }\KeywordTok{aes}\NormalTok{(}\KeywordTok{reorder}\NormalTok{(class, hwy), hwy)) }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_boxplot}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+  \includegraphics[width=1\linewidth]{ggplot2-solution_files/figure-latex/unnamed-chunk-11-1}
+  Here \texttt{reorder} arrange the factor \texttt{class} according to
+  the magnitute of \texttt{hwy} in ascending order.
+\item
+  Explore the distribution of the carat variable in the
+  \texttt{diamonds} dataset. What binwidth reveals the most interesting
+  patterns?
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggplot}\NormalTok{(diamonds, }\KeywordTok{aes}\NormalTok{(carat)) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{geom_histogram}\NormalTok{(}\DataTypeTok{binwidth =} \FloatTok{0.01}\NormalTok{) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{ggtitle}\NormalTok{(}\StringTok{"binwidth: 0.01"}\NormalTok{)}
+
+\KeywordTok{ggplot}\NormalTok{(diamonds, }\KeywordTok{aes}\NormalTok{(carat)) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{geom_histogram}\NormalTok{(}\DataTypeTok{binwidth =} \FloatTok{0.03}\NormalTok{) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{ggtitle}\NormalTok{(}\StringTok{"binwidth: 0.01"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+  \includegraphics[width=0.5\linewidth]{ggplot2-solution_files/figure-latex/unnamed-chunk-12-1}
+  \includegraphics[width=0.5\linewidth]{ggplot2-solution_files/figure-latex/unnamed-chunk-12-2}
+\item
+  Explore the distribution of the price variable in the
+  \texttt{diamonds} data. How does the distribution vary by cut?
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggplot}\NormalTok{(diamonds, }\KeywordTok{aes}\NormalTok{(price)) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{geom_histogram}\NormalTok{(}\DataTypeTok{bins =} \DecValTok{30}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{facet_grid}\NormalTok{(.}\OperatorTok{~}\NormalTok{cut)}
+\end{Highlighting}
+\end{Shaded}
+
+  \includegraphics[width=1\linewidth]{ggplot2-solution_files/figure-latex/unnamed-chunk-13-1}
+\item
+  You now know (at least) three ways to compare the distributions of
+  subgroups: \texttt{geom\_violin()}, \texttt{geom\_freqpoly()} and the
+  colour aesthetic, or \texttt{geom\_histogram()} and facetting. What
+  are the strengths and weaknesses of each approach? What other
+  approaches could you try?
+\item
+  Read the documentation for \texttt{geom\_bar()}. What does the
+  \texttt{weight} aesthetic do?
+\item
+  Using the techniques already discussed in this chapter, come up with
+  three ways to visualise a 2d categorical distribution. Try them out by
+  visualising the distribution of \texttt{model} and
+  \texttt{manufacturer}, \texttt{trans} and \texttt{class}, and
+  \texttt{cyl} and \texttt{trans}.
 \end{enumerate}
 
 \bibliography{packages.bib,book.bib}
